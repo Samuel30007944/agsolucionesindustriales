@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AG Soluciones Industriales - Aguero Guedez</title>
+
+  <!-- Google Fonts Montserrat y Roboto -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome para iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+
+  <header>
+    <h1>AG Soluciones Industriales</h1>
+    <p>Fabricación y reparación con calidad | Aguero Guedez</p>
+  </header>
+
+  <nav>
+    <a href="servicios.html">Servicios</a>
+    <a href="#galeria">Galería</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+
+  <section class="seccion visible" id="servicios">
+    <h2>¿Qué hacemos?</h2>
+    <div class="servicios">
+      <div class="servicio fade-in visible">
+        <h3><i class="fa-solid fa-wrench"></i> Fabricación de Ventiladores</h3>
+        <p>Diseñamos y fabricamos ventiladores industriales robustos, eficientes y personalizados para todo tipo de entornos.</p>
+      </div>
+      <div class="servicio fade-in visible">
+        <h3><i class="fa-solid fa-fire-flame-curved"></i> Reparación de Bombas para Calderas</h3>
+        <p>Servicio técnico especializado para el mantenimiento y reparación de bombas industriales utilizadas en calderas.</p>
+      </div>
+      <div class="servicio fade-in visible">
+        <h3><i class="fa-solid fa-cog"></i> Válvulas de Seguridad</h3>
+        <p>Revisión, calibración y reparación de válvulas de seguridad para calderas, con total cumplimiento de normas.</p>
+      </div>
+      <div class="servicio fade-in visible">
+        <h3><i class="fa-solid fa-tank-water"></i> Fabricación de Tanques</h3>
+        <p>Diseñamos y fabricamos tanques metálicos de alta resistencia para usos industriales o personalizados.</p>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 25px;">
+      <a href="servicios.html" class="btn-ver-mas">Ver más servicios</a>
+    </div>
+  </section>
+
+  <section class="seccion fondo-gris visible" id="galeria">
+    <h2>Galería de trabajos</h2>
+    <div class="galeria fade-in visible">
+      <img src="ventilador.png" alt="Ventilador" />
+      <img src="bombas.png" alt="Bomba" />
+      <img src="tanques.png" alt="Tanque" />
+    </div>
+  </section>
+
+  <section class="seccion visible" id="contacto">
+    <h2>Contáctanos</h2>
+    <form class="formulario fade-in visible" action="danielaguero270890@gmail.com" method="post" enctype="text/plain">
+      <input type="text" name="nombre" placeholder="Tu nombre" required />
+      <input type="email" name="email" placeholder="Tu correo electrónico" required />
+      <textarea name="mensaje" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+      <button type="submit" class="btn-enviar">Enviar</button>
+    </form>
+  </section>
+
+  <a class="whatsapp-float" href="https://wa.me/584128652497" target="_blank" title="Escríbenos por WhatsApp" aria-label="WhatsApp">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+  </a>
+
+  <footer>
+    <p>&copy; 2025 AG Soluciones Industriales | Aguero Guedez</p>
+    <p>
+      <a href="https://www.facebook.com/profile.php?viewas=100000686899395&id=61578116338826" target="_blank" class="footer-link">
+        <i class="fa-brands fa-facebook"></i> Visítanos en Facebook
+      </a>
+    </p>
+  </footer>
+
+  <script src="scripts.js"></script>
+
+</body>
+</html>
