@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel de Administración - Mensajes</title>
+  <style>
+    body {
+      margin: 0; font-family: 'Roboto', sans-serif; background: #f5f7fa; color: #222;
+      display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+    }
+    header {
+      background: #004aad; color: white; padding: 1rem; text-align: center;
+      font-weight: 700; font-size: 1.2rem;
+    }
+    main {
+      flex: 1; display: flex; flex-direction: column; padding: 0.5rem 1rem; overflow: hidden;
+    }
+    #filtro {
+      margin-bottom: 1rem; display: flex;
+    }
+    #filtro input {
+      flex: 1; padding: 0.8rem 1rem; font-size: 1rem;
+      border-radius: 8px; border: 1px solid #ccc; outline: none;
+      transition: border-color 0.3s;
+    }
+    #filtro input:focus {
+      border-color: #004aad; box-shadow: 0 0 5px #004aad99;
+    }
+    #lista-mensajes {
+      flex: 1; overflow-y: auto; background: white;
+      border-radius: 8px; box-shadow: 0 0 8px #00000011; padding: 0.5rem;
+    }
+    .mensaje {
+      border-bottom: 1px solid #eee; padding: 0.8rem;
+      cursor: pointer; transition: background-color 0.2s;
+      border-radius: 6px; user-select: none;
+    }
+    .mensaje:last-child { border-bottom: none; }
+    .mensaje:hover, .mensaje:active { background-color: #e8f0fe; }
+    .nombre {
+      font-weight: 700; font-size: 1.1rem; color: #004aad; margin-bottom: 0.3rem;
+    }
+    .email {
+      font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;
+    }
+    .texto {
+      font-size: 1rem; color: #333; white-space: pre-wrap;
+    }
+    /* Modal */
+    #modal {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none; justify-content: center; align-items: center;
+      padding: 1rem; z-index: 1000;
+    }
+    #modal .contenido {
+      background: white; border-radius: 12px; max-width: 400px; width: 100%;
+      max-height: 80vh; overflow-y: auto; padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      position: relative; font-size: 1rem; line-height: 1.4;
+      -webkit-overflow-scrolling: touch;
+    }
+    #modal .cerrar-btn {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      background: #004aad; border: none; color: white;
+      font-size: 1.3rem; width: 32px; height: 32px; border-radius: 50%;
+      cursor: pointer; line-height: 1;
+    }
+    #modal .cerrar-btn:active { background: #003080; }
+    /* Responsive */
+    @media (max-width: 480px) {
+      #modal .contenido { max-width: 95vw; padding: 1rem; }
+      #filtro input { font-size: 1.1rem; padding: 1rem; }
+      .mensaje { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>Panel de Administración - Mensajes Recibidos</header>
+
+<main>
+  <div id="filtro">
+    <input type="search" id="buscador" placeholder="Buscar por nombre, email o mensaje..." aria-label="Buscar mensajes" />
+  </div>
+
+  <div id="lista-mensajes" role="list" aria-live="polite" aria-relevant="additions"></div>
+</main>
+
+<!-- Modal -->
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo" aria-describedby="modal-contenido">
+  <div class="contenido">
+    <button class="cerrar-btn" aria-label="Cerrar ventana">&times;</button>
+    <h2 id="modal-titulo"></h2>
+    <p id="modal-email" style="font-style: italic; color: #555;"></p>
+    <hr />
+    <p id="modal-contenido"></p>
+  </div>
+</div>
+
+<script>
+  // Cambia esta función para hacer fetch real a tu backend
+  async function obtenerMensajes() {
+    // Ejemplo con datos simulados:
+    return [
+      { id: 1, nombre: "Ana Pérez", email: "ana@mail.com", mensaje: "Hola, quisiera información sobre ventiladores." },
+      { id: 2, nombre: "Carlos Ruiz", email: "carlos@mail.com", mensaje: "Necesito reparar una bomba para caldera urgente." },
+      { id: 3, nombre: "María López", email: "maria@mail.com", mensaje: "¿Fabrican tanques personalizados?" },
+      { id: 4, nombre: "Jorge Gómez", email: "jorge@mail.com", mensaje: "Solicito cotización para válvulas de seguridad." }
+    ];
+  }
+
+  const lista = document.getElementById('lista-mensajes');
+  const buscador = document.getElementById('buscador');
+  const modal = document.getElementById('modal');
+  const modalTitulo = document.getElementById('modal-titulo');
+  const modalEmail = document.getElementById('modal-email');
+  const modalContenido = document.getElementById('modal-contenido');
+  const cerrarBtn = modal.querySelector('.cerrar-btn');
+
+  let mensajes = [];
+
+  function mostrarMensajes(mensajesMostrar) {
+    lista.innerHTML = '';
+    if(mensajesMostrar.length === 0) {
+      lista.innerHTML = '<p style="padding: 1rem; color: #999;">No se encontraron mensajes.</p>';
+      return;
+    }
+    mensajesMostrar.forEach(m => {
+      const div = document.createElement('div');
+      div.className = 'mensaje';
+      div.tabIndex = 0;
+      div.setAttribute('role', 'listitem');
+      div.innerHTML = `
+        <div class="nombre">${m.nombre}</div>
+        <div class="email">${m.email}</div>
+        <div class="texto">${m.mensaje.length > 80 ? m.mensaje.substring(0, 80) + '...' : m.mensaje}</div>
+      `;
+      div.onclick = () => abrirModal(m);
+      div.onkeydown = (e) => {
+        if(e.key === "Enter" || e.key === " ") {
+          abrirModal(m);
+          e.preventDefault();
+        }
+      };
+      lista.appendChild(div);
+    });
+  }
+
+  function abrirModal(mensaje) {
+    modalTitulo.textContent = mensaje.nombre;
+    modalEmail.textContent = mensaje.email;
+    modalContenido.textContent = mensaje.mensaje;
+    modal.style.display = 'flex';
+    cerrarBtn.focus();
+  }
+
+  function cerrarModal() {
+    modal.style.display = 'none';
+    buscador.focus();
+  }
+
+  cerrarBtn.onclick = cerrarModal;
+
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && modal.style.display === 'flex') {
+      cerrarModal();
+    }
+  });
+
+  buscador.addEventListener('input', () => {
+    const texto = buscador.value.toLowerCase();
+    const filtrados = mensajes.filter(m => 
+      m.nombre.toLowerCase().includes(texto) ||
+      m.email.toLowerCase().includes(texto) ||
+      m.mensaje.toLowerCase().includes(texto)
+    );
+    mostrarMensajes(filtrados);
+  });
+
+  (async () => {
+    mensajes = await obtenerMensajes();
+    mostrarMensajes(mensajes);
+  })();
+</script>
+
+</body>
+</html>
