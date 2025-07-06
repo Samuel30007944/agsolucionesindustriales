@@ -29,13 +29,14 @@ header {
   font-family: 'Montserrat', sans-serif;
 }
 
-header::before {
+/* header::before { 
+  (si quieres oscurecer el fondo del header, descomenta esto)
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.55);
   z-index: 1;
-}
+} */
 
 header > * {
   position: relative;
@@ -61,27 +62,21 @@ nav a {
   transition: color 0.3s ease;
 }
 
-nav a:hover,
-nav a.activo {
-  color: #ffc107; /* Amarillo mostaza */
+nav a:hover {
+  color: #ffc107;
 }
 
 /* Secciones */
 .seccion {
   padding: 50px 20px;
-  max-width: 1400px; /* Más ancho para más servicios */
-  margin: 40px auto;
+  max-width: 1200px;
+  margin: auto 0 40px;
   background-color: white;
   border-radius: 12px;
   box-shadow: 0 3px 15px rgba(0,0,0,0.1);
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-
-.seccion.visible {
   opacity: 1;
   transform: translateY(0);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 .fondo-gris {
@@ -97,10 +92,11 @@ h2 {
   text-align: center;
 }
 
+/* Servicios */
 .servicios {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 40px 30px; /* Más espacio vertical y horizontal */
+  gap: 25px;
 }
 
 .servicio {
@@ -131,6 +127,24 @@ h2 {
   font-size: 1.4rem;
 }
 
+/* Botón "Ver más servicios" */
+.btn-ver-mas {
+  display: inline-block;
+  padding: 12px 28px;
+  background-color: #005599;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,85,153,0.2);
+}
+
+.btn-ver-mas:hover {
+  background-color: #003366;
+}
+
 /* Galería */
 .galeria {
   display: flex;
@@ -153,7 +167,8 @@ h2 {
 }
 
 /* Formulario */
-.formulario input, .formulario textarea {
+.formulario input,
+.formulario textarea {
   width: 100%;
   padding: 14px;
   margin-bottom: 20px;
@@ -164,7 +179,8 @@ h2 {
   transition: border-color 0.3s ease;
 }
 
-.formulario input:focus, .formulario textarea:focus {
+.formulario input:focus,
+.formulario textarea:focus {
   border-color: #005599;
   outline: none;
 }
@@ -186,26 +202,6 @@ h2 {
 }
 
 .formulario button:hover {
-  background-color: #003366;
-  box-shadow: 0 8px 18px rgba(0,51,102,0.6);
-}
-
-/* Botón Ver más servicios (si usas en index) */
-.btn-ver-mas {
-  display: inline-block;
-  background-color: #005599;
-  color: white;
-  padding: 12px 30px;
-  border-radius: 8px;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 1.1rem;
-  text-decoration: none;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 5px 12px rgba(0,85,153,0.4);
-}
-
-.btn-ver-mas:hover {
   background-color: #003366;
   box-shadow: 0 8px 18px rgba(0,51,102,0.6);
 }
@@ -292,5 +288,32 @@ footer a.footer-link:hover {
 
   .servicios {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ======================= MENSAJE GRACIAS ======================= */
+
+#mensaje-gracias {
+  display: none;
+  margin-top: 20px;
+  text-align: center;
+  color: green;
+  font-weight: bold;
+  font-size: 1.1rem;
+  animation: fadeIn 1s ease forwards;
+}
+
+#mensaje-gracias.mostrar {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
