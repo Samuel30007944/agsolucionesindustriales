@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AG Soluciones Industriales - Aguero Guedez</title>
+  <meta name="description" content="Servicios de fabricación y reparación industrial en Venezuela, especializado en ventiladores, bombas, válvulas y tanques." />
 
   <!-- Google Fonts Montserrat y Roboto -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto&display=swap" rel="stylesheet" />
@@ -12,6 +13,34 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <link rel="stylesheet" href="estilos.css" />
+
+  <style>
+    /* Estilos para mensaje de agradecimiento */
+    #mensaje-gracias {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity 0.5s ease, max-height 0.5s ease;
+      color: green;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    #mensaje-gracias.mostrar {
+      opacity: 1;
+      max-height: 100px;
+    }
+
+    /* WhatsApp float button hover */
+    .whatsapp-float img {
+      width: 50px;
+      transition: transform 0.3s ease;
+    }
+
+    .whatsapp-float:hover img {
+      transform: scale(1.1);
+    }
+  </style>
 </head>
 <body>
 
@@ -63,56 +92,65 @@
   <section class="seccion visible" id="contacto">
     <h2>Contáctanos</h2>
     <form class="formulario fade-in visible" id="formulario-contacto">
-      <input type="text" name="nombre" placeholder="Tu nombre" required />
-      <input type="email" name="email" placeholder="Tu correo electrónico" required />
-      <textarea name="mensaje" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+      <label for="nombre">Nombre</label>
+      <input id="nombre" type="text" name="nombre" placeholder="Tu nombre" required />
+
+      <label for="email">Correo electrónico</label>
+      <input id="email" type="email" name="email" placeholder="Tu correo electrónico" required />
+
+      <label for="mensaje">Mensaje</label>
+      <textarea id="mensaje" name="mensaje" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+
       <button type="submit" class="btn-enviar">Enviar</button>
-      <div id="mensaje-gracias" class="mensaje-oculto">¡Gracias por tu mensaje! Te responderemos pronto.</div>
+      <div id="mensaje-gracias">¡Gracias por tu mensaje! Te responderemos pronto.</div>
     </form>
   </section>
 
-  <a class="whatsapp-float" href="https://wa.me/584128652497" target="_blank" title="Escríbenos por WhatsApp" aria-label="WhatsApp">
+  <a
+    class="whatsapp-float"
+    href="https://wa.me/584128652497"
+    target="_blank"
+    rel="noopener noreferrer"
+    title="Escríbenos por WhatsApp"
+    aria-label="WhatsApp"
+  >
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
   </a>
 
   <footer>
     <p>&copy; 2025 AG Soluciones Industriales | Aguero Guedez</p>
     <p>
-      <a href="https://www.facebook.com/profile.php?viewas=100000686899395&id=61578116338826" target="_blank" class="footer-link">
+      <a href="https://www.facebook.com/profile.php?viewas=100000686899395&id=61578116338826" target="_blank" rel="noopener noreferrer" class="footer-link">
         <i class="fa-brands fa-facebook"></i> Visítanos en Facebook
       </a>
     </p>
   </footer>
 
-  <!-- Script de envío a Formsubmit con animación -->
   <script>
-    document.getElementById("formulario-contacto").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const form = e.target;
+    const form = document.querySelector("form");
 
-      fetch("https://formsubmit.co/ajax/peraltasamuel065@gmail.com", {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const nombre = form.nombre.value;
+      const email = form.email.value;
+      const mensaje = form.mensaje.value;
+
+      await fetch("https://tu-backend-render.onrender.com/api/mensajes", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          nombre: form.nombre.value,
-          email: form.email.value,
-          mensaje: form.mensaje.value
-        })
-      })
-      .then(response => {
-        if (response.ok) {
-          form.reset();
-          document.getElementById("mensaje-gracias").classList.add("mostrar");
-        } else {
-          alert("Ocurrió un error. Intenta más tarde.");
-        }
-      })
-      .catch(error => {
-        alert("Error al enviar. Verifica tu conexión.");
+        body: JSON.stringify({ nombre, email, mensaje })
       });
+
+      form.reset();
+      const mensajeGracias = document.getElementById("mensaje-gracias");
+      mensajeGracias.classList.add("mostrar");
+
+      setTimeout(() => {
+        mensajeGracias.classList.remove("mostrar");
+      }, 4000);
     });
   </script>
 
