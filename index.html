@@ -62,11 +62,12 @@
 
   <section class="seccion visible" id="contacto">
     <h2>Contáctanos</h2>
-    <form class="formulario fade-in visible" action="danielaguero270890@gmail.com" method="post" enctype="text/plain">
+    <form class="formulario fade-in visible" id="formulario-contacto">
       <input type="text" name="nombre" placeholder="Tu nombre" required />
       <input type="email" name="email" placeholder="Tu correo electrónico" required />
       <textarea name="mensaje" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
       <button type="submit" class="btn-enviar">Enviar</button>
+      <div id="mensaje-gracias" class="mensaje-oculto">¡Gracias por tu mensaje! Te responderemos pronto.</div>
     </form>
   </section>
 
@@ -83,7 +84,37 @@
     </p>
   </footer>
 
-  <script src="scripts.js"></script>
+  <!-- Script de envío a Formsubmit con animación -->
+  <script>
+    document.getElementById("formulario-contacto").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const form = e.target;
+
+      fetch("https://formsubmit.co/ajax/danielaguero270890@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          nombre: form.nombre.value,
+          email: form.email.value,
+          mensaje: form.mensaje.value
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          form.reset();
+          document.getElementById("mensaje-gracias").classList.add("mostrar");
+        } else {
+          alert("Ocurrió un error. Intenta más tarde.");
+        }
+      })
+      .catch(error => {
+        alert("Error al enviar. Verifica tu conexión.");
+      });
+    });
+  </script>
 
 </body>
 </html>
