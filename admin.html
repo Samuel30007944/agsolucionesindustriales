@@ -100,9 +100,39 @@
 </div>
 
 <script>
-  // Cambia esta función para hacer fetch real a tu backend
+  // Autenticación simple (cambia "tuclave123" por la que quieras)
+  const PASSWORD = "tuclave123";
+
+  function pedirPassword() {
+    let intentos = 3;
+    while(intentos > 0) {
+      const input = prompt("Introduce la contraseña para acceder al panel de administración:");
+      if(input === null) {
+        // Cancelar: redirige a la página principal
+        window.location.href = "index.html";
+        return false;
+      }
+      if(input === PASSWORD) {
+        return true;
+      } else {
+        alert(`Contraseña incorrecta. Te quedan ${intentos - 1} intento(s).`);
+        intentos--;
+      }
+    }
+    alert("Has agotado los intentos. Serás redirigido a la página principal.");
+    window.location.href = "index.html";
+    return false;
+  }
+
+  if(!pedirPassword()) {
+    // No continuar si no autenticó
+    throw new Error("No autenticado");
+  }
+
+  // Aquí empieza el resto de la lógica después de autenticación
+
   async function obtenerMensajes() {
-    // Ejemplo con datos simulados:
+    // Cambia esta función para hacer fetch real a tu backend
     return [
       { id: 1, nombre: "Ana Pérez", email: "ana@mail.com", mensaje: "Hola, quisiera información sobre ventiladores." },
       { id: 2, nombre: "Carlos Ruiz", email: "carlos@mail.com", mensaje: "Necesito reparar una bomba para caldera urgente." },
